@@ -1,22 +1,36 @@
 package org.example.objects.animals;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.example.objects.StandartObject;
+import lombok.Getter;
+import org.example.enums.Direction;
+import org.example.interfaces.objects.Eatable;
+import org.example.util.AnimalUtility;
 
 import java.util.Map;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
-@NoArgsConstructor
-public abstract class Animal extends StandartObject {
+@Getter
+public abstract class Animal implements Eatable {
 
-    private Map<? extends Animal, Double> chances;
+    private final double weight;
+    private final double maxCountOnCell;
+    private final double speed;
+    private final double satiatingFood;
+
+    protected Map<Class<? extends Eatable>, Double> chances = AnimalUtility.animalChances(this.getClass());
 
     public Animal(double weight, double maxCountOnCell, double speed, double satiatingFood) {
-        super(weight, maxCountOnCell, speed, satiatingFood);
+        this.weight = weight;
+        this.maxCountOnCell = maxCountOnCell;
+        this.speed = speed;
+        this.satiatingFood = satiatingFood;
     }
+
+    public void eat(Eatable food) {}
+
+    public void move(Direction direction) {}
+
+    public void multiply() {}
+
+    public void die() {}
 }
 
 

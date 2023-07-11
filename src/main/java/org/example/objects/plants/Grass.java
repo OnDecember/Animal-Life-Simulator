@@ -1,13 +1,11 @@
 package org.example.objects.plants;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
 public class Grass extends Plant {
 
     public Grass() {
-        super(1, 200, 0, 0);
+        super(1, 200);
     }
 }
