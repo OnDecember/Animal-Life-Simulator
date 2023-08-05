@@ -1,17 +1,23 @@
 package org.application.objects.animals.herbivorous;
 
-import org.application.enums.AnimalType;
-import org.application.interfaces.objects.Herbivorous;
-import org.application.objects.animals.Animal;
+import lombok.ToString;
+import org.application.annotations.FilePath;
+import org.application.objects.animals.Herbivorous;
+import org.application.config.database.Record;
 
-public class Rabbit extends Animal implements Herbivorous {
+@ToString
+@FilePath(filePath = "Rabbit.yaml")
+public class Rabbit extends Herbivorous {
 
-    public Rabbit() {
-        super(2, 150, 2, 0.45, AnimalType.Rabbit);
+    private final Record record;
+
+    public Rabbit(Record record) {
+        super(record);
+        this.record = record;
     }
 
     @Override
     public Rabbit multiply() {
-        return new Rabbit();
+        return new Rabbit(record);
     }
 }

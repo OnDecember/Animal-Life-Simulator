@@ -1,23 +1,20 @@
 package org.application.objects.plants;
 
 import lombok.*;
-import org.application.interfaces.objects.Dying;
-import org.application.interfaces.objects.Eatable;
+import org.application.objects.Organism;
+import org.application.config.database.Record;
 
-
+@ToString
 @Getter
-public abstract class Plant implements Eatable, Dying {
-
-    protected double weight;
-    protected double maxCountOnCell;
+public abstract class Plant extends Organism {
     private boolean isAlive = true;
 
-    public Plant(double weight, double maxCountOnCell) {
-        this.weight = weight;
-        this.maxCountOnCell = maxCountOnCell;
+    public Plant(Record record) {
+        super(record);
     }
 
     public void die() {
         this.isAlive = false;
     }
 }
+

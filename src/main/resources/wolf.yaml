@@ -1,0 +1,6 @@
+weight: 10
+maxCountOnCell: 10
+speed: 10
+maxSatiatingFood: 10
+animalType: Wolf
+saturation: 10

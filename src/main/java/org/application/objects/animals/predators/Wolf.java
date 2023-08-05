@@ -1,17 +1,23 @@
 package org.application.objects.animals.predators;
 
-import org.application.enums.AnimalType;
-import org.application.interfaces.objects.Predator;
-import org.application.objects.animals.Animal;
+import lombok.ToString;
+import org.application.annotations.FilePath;
+import org.application.objects.animals.Predator;
+import org.application.config.database.Record;
 
-public class Wolf extends Animal implements Predator {
+@ToString
+@FilePath(filePath = "wolf.yaml")
+public class Wolf extends Predator {
 
-    public Wolf() {
-        super(50, 30, 3, 8, AnimalType.Wolf);
+    private final Record record;
+
+    public Wolf(Record record) {
+        super(record);
+        this.record = record;
     }
 
     @Override
     public Wolf multiply() {
-        return new Wolf();
+        return new Wolf(record);
     }
 }
