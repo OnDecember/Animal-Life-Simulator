@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.application.enums.ObjectType;
+import org.application.objects.Organism;
+
+import java.util.Map;
 
 @NoArgsConstructor
 @Setter
@@ -16,7 +19,8 @@ public class Record {
     private int maxCountOnCell;
     private int speed;
     private double maxSatiatingFood;
-    private ObjectType animalType;
+    private ObjectType objectType;
     private double saturation;
+    private Map<ObjectType, Integer> targetMatrix;
 
 }

@@ -2,5 +2,7 @@ weight: 10
 maxCountOnCell: 10
 speed: 10
 maxSatiatingFood: 10
-animalType: Wolf
+objectType: Wolf
 saturation: 10
+targetMatrix:
+  Rabbit: 50

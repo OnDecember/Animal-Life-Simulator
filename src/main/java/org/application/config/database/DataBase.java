@@ -3,42 +3,59 @@ package org.application.config.database;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import lombok.Getter;
-import org.application.annotations.FilePath;
-import org.application.enums.ObjectType;
+import org.application.annotations.Config;
 import org.application.exception.DataBaseLoadException;
 import org.application.objects.Organism;
-import org.application.objects.animals.herbivorous.Rabbit;
-import org.application.objects.animals.predators.Wolf;
-import org.application.objects.plants.Grass;
+import org.reflections.Reflections;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 public class DataBase {
 
-    @Getter
-    private static final DataBase instance = new DataBase();
-    private final Map<ObjectType, Record> dataBase;
+    private static DataBase instance;
+    private final Map<Class<? extends Organism>, Record> dataBase;
+    private static final Reflections reflections = new Reflections("org.application");
 
-    private DataBase(){
-        dataBase = new HashMap<>() {{
-            put(ObjectType.Wolf, loadObject(Wolf.class));
-            put(ObjectType.Rabbit, loadObject(Rabbit.class));
-            put(ObjectType.Grass, loadObject(Grass.class));
-        }};
+    private DataBase() {
+        dataBase = loadDataBase();
+    }
+
+    public static DataBase getInstance() {
+        if (instance == null) {
+            instance = new DataBase();
+        }
+        return instance;
+    }
+
+    public static Set<Class<? extends Organism>> setObjects() {
+        return reflections.getSubTypesOf(Organism.class)
+                .stream()
+                .filter(clazz -> clazz.isAnnotationPresent(Config.class))
+                .collect(Collectors.toSet());
+    }
+
+    private Map<Class<? extends Organism>, Record> loadDataBase() {
+        return setObjects()
+                .stream()
+                .collect(Collectors.toMap(k -> k, this::loadObject));
     }
 
     private Record loadObject(Class<? extends Organism> organism) {
         ObjectMapper mapper = new YAMLMapper();
-        FilePath filePath = organism.getAnnotation(FilePath.class);
-        URL url = organism.getClassLoader().getResource(filePath.filePath());
         try {
-            return mapper.readValue(url, Record.class);
+            return mapper.readValue(getFilePath(organism), Record.class);
         } catch (IOException e) {
             throw new DataBaseLoadException(e);
         }
+    }
+
+    private URL getFilePath(Class<? extends Organism> organism) {
+        Config config = organism.getAnnotation(Config.class);
+        return organism.getClassLoader().getResource(config.filePath());
     }
 }

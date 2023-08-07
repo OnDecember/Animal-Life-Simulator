@@ -18,5 +18,4 @@ public enum ObjectType {
 //    Fox,
     Wolf,
     Grass;
-    ObjectType(){}
 }

@@ -6,10 +6,4 @@ public class DataBaseLoadException extends RuntimeException {
         super(cause);
     }
 
-    public DataBaseLoadException(String message, Throwable cause) {
-        super(message, cause);
-    }
-    public DataBaseLoadException(String message) {
-        super(message);
-    }
 }
