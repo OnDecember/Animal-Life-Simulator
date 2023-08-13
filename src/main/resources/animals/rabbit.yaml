@@ -1,8 +1,10 @@
 weight: 10
-maxCountOnCell: 10
-speed: 10
+maxCountOnCell: 5
+speed: 4
 maxSatiatingFood: 10
 objectType: Rabbit
 saturation: 10
+chanceToReproduce: 70
+maxChild: 5
 targetMatrix:
   Grass: 100

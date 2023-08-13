@@ -1,22 +1,24 @@
 package org.application;
 
-import org.application.config.database.DataBase;
-import org.application.config.database.Record;
+import org.application.console.Console;
 import org.application.island.Island;
-import org.application.objects.animals.predators.Wolf;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Survival {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Island island = new Island();
-        island.initIsland();
-        System.out.println(Arrays.stream(island.locations)
-                .flatMap(Arrays::stream)
-                .map(location -> location.getObjects().values())
-                .flatMap(Collection::stream)
-                .mapToLong(Collection::size)
-                .sum());
+        Console console = new Console(island);
+        ScheduledExecutorService service = Executors.newScheduledThreadPool(2);
+        service.scheduleAtFixedRate(console, 0, 1, TimeUnit.SECONDS);
+
+        Simulation simulation = new Simulation(island);
+
+        service.scheduleAtFixedRate(simulation, 0, 1, TimeUnit.SECONDS);
+
+        TimeUnit.SECONDS.sleep(10);
+        service.shutdown();
     }
 }

@@ -1,16 +1,24 @@
 //package org.application.objects.animals.predators;
 //
-//import org.application.enums.AnimalType;
+//import lombok.ToString;
+//import org.application.annotations.Config;
+//import org.application.config.database.Record;
 //import org.application.objects.animals.Predator;
+//
+//@ToString
+//@Config(filePath = "animals/fox.yaml")
 //
 //public class Fox extends Predator {
 //
-//    public Fox() {
-//        super(8, 30, 2, 2, AnimalType.Fox);
+//    private final Record record;
+//
+//    public Fox(Record record) {
+//        super(record);
+//        this.record = record;
 //    }
 //
 //    @Override
 //    public Fox multiply() {
-//        return new Fox();
+//        return new Fox(record);
 //    }
 //}

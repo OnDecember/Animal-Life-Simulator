@@ -10,7 +10,6 @@ import org.application.config.database.Record;
 public class Rabbit extends Herbivorous {
 
     private final Record record;
-
     public Rabbit(Record record) {
         super(record);
         this.record = record;

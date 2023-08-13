@@ -11,7 +11,8 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -23,30 +24,24 @@ public class Island {
 
     private int width;
     private int height;
-    public Location[][] locations;
+    private volatile Location[][] locations;
 
     {
-        try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("island/island.yaml")) {
-            Yaml yaml = new Yaml();
-            Map<String, Integer> map = yaml.load(inputStream);
-            this.width = map.get("width");
-            this.height = map.get("height");
-        } catch (IOException exception) {
-            throw new RuntimeException("file not found", exception);
-        }
+        loadIslandConfig();
         locations = new Location[height][width];
+        initIsland();
     }
 
     public void initIsland() {
-        for (int i = 0; i < locations.length; i++) {
-            for (int j = 0; j < locations[i].length; j++) {
-                locations[i][j] = createLocation();
+        for (int y = 0; y < locations.length; y++) {
+            for (int x = 0; x < locations[y].length; x++) {
+                locations[y][x] = createLocation(x, y);
             }
         }
     }
 
-    private Location createLocation() {
-        Location location = new Location();
+    private Location createLocation(int x, int y) {
+        Location location = new Location(x, y);
         DataBase.setObjects()
                 .forEach(clazz -> {
                     Record record = dataBase.get(clazz);
@@ -59,4 +54,25 @@ public class Island {
         return location;
     }
 
+    private void loadIslandConfig() {
+        try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("island/island.yaml")) {
+            Yaml yaml = new Yaml();
+            Map<String, Integer> map = yaml.load(inputStream);
+            this.width = map.get("width");
+            this.height = map.get("height");
+        } catch (IOException exception) {
+            throw new RuntimeException("file not found", exception);
+        }
+    }
+
+    public Map<Class<? extends Organism>, Set<Organism>> getGroupingOrganismMap() {
+        return Arrays.stream(locations)
+                .flatMap(Arrays::stream)
+                .map(Location::getObjects)
+                .map(Map::entrySet)
+                .flatMap(Collection::stream)
+                .collect(Collectors.groupingBy(Map.Entry::getKey,
+                        Collectors.mapping(Map.Entry::getValue,
+                                Collectors.flatMapping(Collection::stream, Collectors.toSet()))));
+    }
 }
