@@ -56,13 +56,13 @@ public class MoveController extends Controller {
         if (newLocation.checkMaxCountOrganismOnLocation(animal)) return;
 
         Map<Class<? extends Organism>, Set<Organism>> organismOnLocation = newLocation.getObjects();
-        Set<Organism> newLocationOrganismSet = organismOnLocation.get(animal.getClass());
-        newLocationOrganismSet = newLocationOrganismSet == null ? new HashSet<>() : newLocationOrganismSet;
 
-        organismOnLocation.merge(animal.getClass(), newLocationOrganismSet, (set1, set2) -> {
+        organismOnLocation.merge(animal.getClass(), new HashSet<>(), (set1, set2) -> {
             set1.addAll(set2);
             return set1;
         });
+
+        Set<Organism> newLocationOrganismSet = organismOnLocation.get(animal.getClass());
 
         currentLocation.removeOrganism(animal);
         newLocationOrganismSet.add(animal);
