@@ -2,6 +2,7 @@ package org.application.objects.animals.predators;
 
 import lombok.ToString;
 import org.application.annotations.Config;
+import org.application.console.Console;
 import org.application.objects.animals.Predator;
 import org.application.config.database.Record;
 
@@ -18,6 +19,7 @@ public class Wolf extends Predator {
 
     @Override
     public Wolf multiply() {
+        Console.logBornOrganism(this.getClass());
         return new Wolf(record);
     }
 }

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class Location {
 
     private final Factory factory = Factory.getInstance();
-    private final Map<Class<? extends Organism>, Set<Organism>> objects = new HashMap<>();
+    private Map<Class<? extends Organism>, Set<Organism>> objects = new HashMap<>();
 
     private final int x;
     private final int y;

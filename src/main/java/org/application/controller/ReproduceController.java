@@ -1,5 +1,6 @@
 package org.application.controller;
 
+import org.application.console.Console;
 import org.application.interfaces.Reproducible;
 import org.application.island.Island;
 import org.application.island.Location;
