@@ -1,8 +1,9 @@
 weight: 10
-maxCountOnCell: 50
-speed: 10
+maxCountOnCell: 3
+speed: 4
 maxSatiatingFood: 10
 objectType: Wolf
-saturation: 10
+chanceToReproduce: 25
+maxChild: 2
 targetMatrix:
   Rabbit: 50

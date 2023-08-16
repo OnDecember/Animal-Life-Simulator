@@ -1,6 +1,7 @@
 package org.application.island;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.application.config.database.Record;
 import org.application.config.factory.Factory;
 import org.application.objects.Organism;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 public class Location {
 
     private final Factory factory = Factory.getInstance();
-    private Map<Class<? extends Organism>, Set<Organism>> objects = new HashMap<>();
+    private Map<Class<? extends Organism>, Set<Organism>> organisms = new HashMap<>();
 
     private final int x;
     private final int y;
@@ -29,7 +30,7 @@ public class Location {
         for (int i = 0; i < maxCountOnCell; i++) {
             set.add(factory.create(value, record));
         }
-        objects.put(value, set);
+        organisms.put(value, set);
     }
 
     public int countOfAnimals(int maxCountOnCell) {
@@ -37,19 +38,19 @@ public class Location {
         return random.nextInt(maxCountOnCell + 1);
     }
 
-    public Set<Organism> getOrganism() {
-        return objects.values()
+    public Set<Organism> getSetOrganismsOnLocation() {
+        return organisms.values()
                 .stream()
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());
     }
 
     public void removeOrganism(Organism organism) {
-        objects.get(organism.getClass()).remove(organism);
+        organisms.get(organism.getClass()).remove(organism);
     }
 
     public Set<Organism> getSpeciesAnimalsOnLocation(Organism organism) {
-        Map<Class<? extends Organism>, Set<Organism>> organismOnLocation = getObjects();
+        Map<Class<? extends Organism>, Set<Organism>> organismOnLocation = getOrganisms();
         if (!organismOnLocation.containsKey(organism.getClass())) return new HashSet<>();
         return organismOnLocation.get(organism.getClass());
     }

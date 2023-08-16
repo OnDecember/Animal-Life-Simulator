@@ -1,5 +1,7 @@
 package org.application.console;
 
+import lombok.Getter;
+import org.application.global.GlobalVariables;
 import org.application.island.Island;
 import org.application.objects.Organism;
 
@@ -17,18 +19,20 @@ public record Console(Island island) implements Runnable {
     }
 
     public void displayInfo() {
-        addAllOrganismToStatistic();
-        System.out.println("_".repeat(54));
-        System.out.printf("|%-12s| %-8s| %-8s| %-8s| %-8s|%n", "Organism", "All", "Born", "Dead", "Killed");
-        System.out.printf("|%-12s|%-8s|%-8s|%-8s|%-8s|%n", "_".repeat(12), "_".repeat(9), "_".repeat(9), "_".repeat(9), "_".repeat(9));
-        statistic.forEach((key, value) -> System.out.printf("|%-12s| %-8d| %-8d| %-8d| %-8d|%n", key.getSimpleName(), value.all, value.born, value.dead, value.killed));
-        System.out.println("¯".repeat(54));
-        System.out.println("\n".repeat(3));
+        GlobalVariables.lock.lock();
+        addAliveOrganismToStatistic();
+        System.out.println("_".repeat(86));
+        System.out.printf("|%-12s| %-10s| %-10s| %-10s| %-10s| %-10s| %-10s|%n", "Organism", "All", "Alive", "Born", "Killed", "Starving", "Dead");
+        System.out.printf("|%-12s|%-10s|%-10s|%-10s|%-10s|%-10s|%-10s|%n", "_".repeat(12), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11));
+        statistic.forEach((key, value) -> System.out.printf("|%-12s| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d|%n", key.getSimpleName(), value.alive + value.dead, value.alive, value.born, value.killed, value.starving, value.dead));
+        System.out.println("¯".repeat(86));
+        System.out.println("\n".repeat(1));
+        GlobalVariables.lock.unlock();
     }
 
-    private void addAllOrganismToStatistic() {
-        Map<Class<? extends Organism>, Set<Organism>> map = island.getGroupingOrganismMap();
-        map.forEach((key, value) -> logAllOrganism(key, value.size()));
+    private void addAliveOrganismToStatistic() {
+        Map<Class<? extends Organism>, Set<Organism>> organismOnIsland = island.getGroupingOrganismMap();
+        organismOnIsland.forEach((key, value) -> logAliveOrganism(key, value.size()));
     }
 
     private static Statistic getStatistic(Class<? extends Organism> clazz) {
@@ -38,28 +42,33 @@ public record Console(Island island) implements Runnable {
         return statistic.get(clazz);
     }
 
-    private static void logAllOrganism(Class<? extends Organism> clazz, Integer numberOfOrganisms) {
-        getStatistic(clazz).all = numberOfOrganisms;
+    private static void logAliveOrganism(Class<? extends Organism> clazz, Integer numberOfOrganisms) {
+        getStatistic(clazz).alive = numberOfOrganisms;
     }
 
     public static void logBornOrganism(Class<? extends Organism> clazz) {
         getStatistic(clazz).born++;
     }
 
-    public static void logDeadOrganism(Class<? extends Organism> clazz) {
-        getStatistic(clazz).dead++;
-    }
-
     public static void logKilledOrganism(Class<? extends Organism> clazz) {
         getStatistic(clazz).killed++;
     }
 
+    public static void logStarvingOrganism(Class<? extends Organism> clazz) {
+        getStatistic(clazz).starving++;
+    }
+
+    public static void logDeadOrganism(Class<? extends Organism> clazz) {
+        getStatistic(clazz).dead++;
+    }
+
     private static class Statistic {
 
-        private int all;
+        private int alive;
         private int born;
-        private int dead;
         private int killed;
+        private int starving;
+        private int dead;
 
         private Statistic() {
         }

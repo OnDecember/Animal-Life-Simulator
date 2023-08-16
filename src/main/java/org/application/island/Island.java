@@ -11,7 +11,10 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -68,7 +71,7 @@ public class Island {
     public Map<Class<? extends Organism>, Set<Organism>> getGroupingOrganismMap() {
         return Arrays.stream(locations)
                 .flatMap(Arrays::stream)
-                .map(Location::getObjects)
+                .map(Location::getOrganisms)
                 .map(Map::entrySet)
                 .flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(Map.Entry::getKey,

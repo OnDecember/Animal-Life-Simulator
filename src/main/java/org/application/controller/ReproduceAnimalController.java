@@ -1,6 +1,6 @@
 package org.application.controller;
 
-import org.application.console.Console;
+import org.application.global.GlobalVariables;
 import org.application.interfaces.Reproducible;
 import org.application.island.Island;
 import org.application.island.Location;
@@ -13,11 +13,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ReproduceController extends Controller {
+public class ReproduceAnimalController extends Controller {
 
     ThreadLocalRandom random = ThreadLocalRandom.current();
 
-    public ReproduceController(Island island) {
+    public ReproduceAnimalController(Island island) {
         super(island);
     }
 
@@ -26,14 +26,14 @@ public class ReproduceController extends Controller {
         Arrays.stream(locations)
                 .flatMap(Arrays::stream)
                 .peek(this::doAction)
-                .flatMap(location -> location.getOrganism().stream())
-                .filter(organism -> organism instanceof Animal animal && !animal.isCanReproduce())
+                .flatMap(location -> location.getSetOrganismsOnLocation().stream())
+                .filter(organism -> organism instanceof Animal animal && animal.isAlive() && !animal.isCanReproduce())
                 .forEach(organism -> organism.setCanReproduce(true));
     }
 
     @Override
     protected void doAction(Location location) {
-        location.getOrganism()
+        location.getSetOrganismsOnLocation()
                 .stream()
                 .filter(organism -> organism instanceof Animal animal && animal.isCanReproduce())
                 .forEach(organism -> reproduce(organism, location));
@@ -61,7 +61,7 @@ public class ReproduceController extends Controller {
                 .limit(countChild)
                 .collect(Collectors.toSet());
 
-        location.getObjects().merge(organism.getClass(), child, (set1, set2) -> {
+        location.getOrganisms().merge(organism.getClass(), child, (set1, set2) -> {
             set1.addAll(set2);
             return set1;
         });

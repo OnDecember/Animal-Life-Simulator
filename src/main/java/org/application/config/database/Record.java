@@ -21,7 +21,6 @@ public class Record {
     private int chanceToReproduce;
     private int maxChild;
     private ObjectType objectType;
-    private double saturation;
     private Map<ObjectType, Integer> targetMatrix;
 
 }

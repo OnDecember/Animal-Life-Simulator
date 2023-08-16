@@ -25,7 +25,6 @@ public abstract class Animal extends Organism implements Movable, Reproducible {
     private double saturation;
     private int maxChild;
 
-    private boolean isAlive = true;
     private boolean canMove = true;
 
     private Map<ObjectType, Integer> targetMatrix;
@@ -33,7 +32,7 @@ public abstract class Animal extends Organism implements Movable, Reproducible {
         super(record);
         this.speed = record.getSpeed();
         this.maxSatiatingFood = record.getMaxSatiatingFood();
-        this.saturation = maxSatiatingFood * 0.6;
+        this.saturation = maxSatiatingFood * 0.75;
         this.targetMatrix = record.getTargetMatrix();
         this.maxChild = record.getMaxChild();
     }
@@ -47,11 +46,6 @@ public abstract class Animal extends Organism implements Movable, Reproducible {
             steps[i] = directions[random.nextInt(directions.length)];
         }
         return steps;
-    }
-
-    @Override
-    public void die() {
-        this.isAlive = false;
     }
 }
 

@@ -24,14 +24,14 @@ public class MoveController extends Controller {
         Arrays.stream(locations)
                 .flatMap(Arrays::stream)
                 .peek(this::doAction)
-                .flatMap(location -> location.getOrganism().stream())
-                .filter(organism -> organism instanceof Animal animal && !animal.isCanMove())
+                .flatMap(location -> location.getSetOrganismsOnLocation().stream())
+                .filter(organism -> organism instanceof Animal animal && animal.isAlive() && !animal.isCanMove())
                 .forEach(organism -> ((Animal) organism).setCanMove(true));
     }
 
     @Override
     protected void doAction(Location location) {
-        location.getOrganism()
+        location.getSetOrganismsOnLocation()
                 .stream()
                 .filter(organism -> organism instanceof Animal animal && animal.isCanMove())
                 .map(organism -> (Movable) organism)
@@ -55,7 +55,7 @@ public class MoveController extends Controller {
         Animal animal = (Animal) movable;
         if (newLocation.checkMaxCountOrganismOnLocation(animal)) return;
 
-        Map<Class<? extends Organism>, Set<Organism>> organismOnLocation = newLocation.getObjects();
+        Map<Class<? extends Organism>, Set<Organism>> organismOnLocation = newLocation.getOrganisms();
 
         organismOnLocation.merge(animal.getClass(), new HashSet<>(), (set1, set2) -> {
             set1.addAll(set2);
