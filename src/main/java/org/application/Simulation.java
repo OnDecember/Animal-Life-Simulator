@@ -21,10 +21,8 @@ public class Simulation implements Runnable {
 
     @Override
     public void run() {
-        GlobalVariables.lock.lock();
         move.start();
         reproduce.start();
         starving.start();
-        GlobalVariables.lock.unlock();
     }
 }

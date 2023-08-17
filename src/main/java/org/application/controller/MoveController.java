@@ -1,6 +1,7 @@
 package org.application.controller;
 
 import org.application.enums.Direction;
+import org.application.global.GlobalVariables;
 import org.application.interfaces.Movable;
 import org.application.island.Island;
 import org.application.island.Location;
@@ -25,7 +26,7 @@ public class MoveController extends Controller {
                 .flatMap(Arrays::stream)
                 .peek(this::doAction)
                 .flatMap(location -> location.getSetOrganismsOnLocation().stream())
-                .filter(organism -> organism instanceof Animal animal && animal.isAlive() && !animal.isCanMove())
+                .filter(organism -> organism instanceof Animal animal && !animal.isCanMove())
                 .forEach(organism -> ((Animal) organism).setCanMove(true));
     }
 

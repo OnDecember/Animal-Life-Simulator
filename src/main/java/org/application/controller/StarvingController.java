@@ -16,11 +16,13 @@ public class StarvingController extends Controller {
 
     @Override
     protected void doAction(Location location) {
+        GlobalVariables.lock.lock();
         location.getSetOrganismsOnLocation()
                 .stream()
-                .filter(organism -> organism instanceof Animal animal && animal.isAlive())
+                .filter(organism -> organism instanceof Animal animal)
                 .map(organism -> (Animal) organism)
                 .forEach(animal -> starving(animal, location));
+        GlobalVariables.lock.unlock();
     }
 
     private void starving(Animal animal, Location location) {

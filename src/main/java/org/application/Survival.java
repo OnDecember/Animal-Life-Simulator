@@ -18,7 +18,7 @@ public class Survival {
         service.scheduleAtFixedRate(simulation, 1, 1, TimeUnit.SECONDS);
 
 
-        TimeUnit.SECONDS.sleep(10);
-        service.shutdown();
+//        TimeUnit.SECONDS.sleep(10);
+//        service.shutdown();
     }
 }

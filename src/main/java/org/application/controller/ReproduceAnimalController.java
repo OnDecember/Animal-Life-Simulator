@@ -27,16 +27,18 @@ public class ReproduceAnimalController extends Controller {
                 .flatMap(Arrays::stream)
                 .peek(this::doAction)
                 .flatMap(location -> location.getSetOrganismsOnLocation().stream())
-                .filter(organism -> organism instanceof Animal animal && animal.isAlive() && !animal.isCanReproduce())
+                .filter(organism -> organism instanceof Animal animal && !animal.isCanReproduce())
                 .forEach(organism -> organism.setCanReproduce(true));
     }
 
     @Override
     protected void doAction(Location location) {
+        GlobalVariables.lock.lock();
         location.getSetOrganismsOnLocation()
                 .stream()
                 .filter(organism -> organism instanceof Animal animal && animal.isCanReproduce())
                 .forEach(organism -> reproduce(organism, location));
+        GlobalVariables.lock.unlock();
     }
 
     private void reproduce(Reproducible reproducible, Location location) {
