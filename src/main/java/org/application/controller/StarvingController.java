@@ -20,14 +20,14 @@ public class StarvingController extends Controller {
                 .stream()
                 .filter(organism -> organism instanceof Animal animal && animal.isAlive())
                 .map(organism -> (Animal) organism)
-                .forEach(this::starving);
+                .forEach(animal -> starving(animal, location));
     }
 
-    private void starving(Animal animal) {
+    private void starving(Animal animal, Location location) {
         double starvingPerStep = animal.getMaxSatiatingFood() * starvingPercent;
         double saturation = animal.getSaturation();
         if (saturation <= starvingPerStep) {
-            animal.die();
+            location.removeOrganism(animal);
             Console.logStarvingOrganism(animal.getClass());
             Console.logDeadOrganism(animal.getClass());
         }

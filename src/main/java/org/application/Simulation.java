@@ -11,14 +11,12 @@ public class Simulation implements Runnable {
     private final Controller move;
     private final Controller reproduce;
     private final Controller starving;
-    private final Controller dying;
 
     public Simulation(Island island) {
         this.island = island;
         move = new MoveController(island);
         reproduce = new ReproduceAnimalController(island);
         starving = new StarvingController(island);
-        dying = new DyingController(island);
     }
 
     @Override
@@ -27,7 +25,6 @@ public class Simulation implements Runnable {
         move.start();
         reproduce.start();
         starving.start();
-        dying.start();
         GlobalVariables.lock.unlock();
     }
 }
