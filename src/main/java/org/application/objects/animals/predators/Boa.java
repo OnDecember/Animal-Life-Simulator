@@ -1,17 +1,23 @@
-//package org.application.objects.animals.predators;
-//
-//import org.application.enums.AnimalType;
-//import org.application.objects.animals.Predator;
-//
-//
-//public class Boa extends Predator {
-//
-//    public Boa() {
-//        super(15, 30, 3, 8, AnimalType.Boa);
-//    }
-//
-//    @Override
-//    public Boa multiply() {
-//        return new Boa();
-//    }
-//}
+package org.application.objects.animals.predators;
+
+import org.application.annotations.Config;
+import org.application.console.Console;
+import org.application.objects.animals.Predator;
+import org.application.config.database.Record;
+
+//@Config(filePath = "animals/rabbit.yaml")
+public class Boa extends Predator {
+
+    private final Record record;
+
+    public Boa(Record record) {
+        super(record);
+        this.record = record;
+    }
+
+    @Override
+    public Boa multiply() {
+        Console.logBornOrganism(this.getClass());
+        return new Boa(record);
+    }
+}

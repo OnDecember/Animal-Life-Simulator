@@ -1,12 +1,10 @@
 package org.application.objects.animals.predators;
 
-import lombok.ToString;
 import org.application.annotations.Config;
 import org.application.console.Console;
 import org.application.objects.animals.Predator;
 import org.application.config.database.Record;
 
-@ToString
 @Config(filePath = "animals/wolf.yaml")
 public class Wolf extends Predator {
 

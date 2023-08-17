@@ -1,7 +1,9 @@
 package org.application;
 
 import org.application.console.Console;
+import org.application.enums.ObjectType;
 import org.application.island.Island;
+import org.application.objects.Organism;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -19,7 +21,5 @@ public class Survival {
         service.scheduleAtFixedRate(simulation, 0, 1, TimeUnit.SECONDS);
         service.scheduleAtFixedRate(console, 0, 1, TimeUnit.SECONDS);
 
-//        TimeUnit.SECONDS.sleep(10);
-//        service.shutdown();
     }
 }

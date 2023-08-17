@@ -33,6 +33,9 @@ public class Console implements Runnable {
         System.out.printf("|%-12s|%-10s|%-10s|%-10s|%-10s|%-10s|%-10s|%n", "_".repeat(12), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11));
         statistic.forEach((key, value) -> System.out.printf("|%-12s| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d|%n", key.getSimpleName(), value.alive + value.dead, value.alive, value.born, value.killed, value.starving, value.dead));
         System.out.println("¯".repeat(86));
+        Statistic allStatistic = allStatistic();
+        System.out.printf("|%-12s| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d|%n", "All", allStatistic.alive + allStatistic.dead, allStatistic.alive, allStatistic.born, allStatistic.killed, allStatistic.starving, allStatistic.dead);
+        System.out.println("¯".repeat(86));
         time();
         System.out.println("\n".repeat(1));
         GlobalVariables.lock.unlock();
@@ -57,6 +60,32 @@ public class Console implements Runnable {
             statistic.put(clazz, new Statistic());
         }
         return statistic.get(clazz);
+    }
+
+    private Statistic allStatistic() {
+        Statistic allStatistic = new Statistic();
+
+        allStatistic.alive = statistic.values()
+                .stream()
+                .reduce(0, (total, el) -> total + el.alive, Integer::sum);
+
+        allStatistic.dead = statistic.values()
+                .stream()
+                .reduce(0, (total, el) -> total + el.dead, Integer::sum);
+
+        allStatistic.starving = statistic.values()
+                .stream()
+                .reduce(0, (total, el) -> total + el.starving, Integer::sum);
+
+        allStatistic.killed = statistic.values()
+                .stream()
+                .reduce(0, (total, el) -> total + el.killed, Integer::sum);
+
+        allStatistic.born = statistic.values()
+                .stream()
+                .reduce(0, (total, el) -> total + el.born, Integer::sum);
+
+        return allStatistic;
     }
 
     private static void logAliveOrganism(Class<? extends Organism> clazz, Integer numberOfOrganisms) {
