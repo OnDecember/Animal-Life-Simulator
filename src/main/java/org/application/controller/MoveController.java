@@ -32,11 +32,13 @@ public class MoveController extends Controller {
 
     @Override
     protected void doAction(Location location) {
+        GlobalVariables.lock.lock();
         location.getSetOrganismsOnLocation()
                 .stream()
                 .filter(organism -> organism instanceof Animal animal && animal.isCanMove())
                 .map(organism -> (Movable) organism)
                 .forEach(movable -> moveAnimal(movable, location));
+        GlobalVariables.lock.unlock();
     }
 
     private void moveAnimal(Movable movable, Location currentLocation) {

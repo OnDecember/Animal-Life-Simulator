@@ -8,7 +8,6 @@ import java.util.Arrays;
 
 public abstract class Controller {
 
-    protected final DataBase dataBase = DataBase.getInstance();
     protected final Island island;
     protected final Location[][] locations;
 

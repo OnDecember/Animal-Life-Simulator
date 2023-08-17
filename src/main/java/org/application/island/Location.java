@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.application.config.database.Record;
 import org.application.config.factory.Factory;
+import org.application.global.GlobalVariables;
 import org.application.objects.Organism;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Getter
@@ -15,6 +17,7 @@ public class Location {
 
     private final Factory factory = Factory.getInstance();
     private Map<Class<? extends Organism>, Set<Organism>> organisms = new HashMap<>();
+    private ThreadLocalRandom random = GlobalVariables.random;
 
     private final int x;
     private final int y;
@@ -34,7 +37,6 @@ public class Location {
     }
 
     public int countOfAnimals(int maxCountOnCell) {
-        Random random = new Random();
         return random.nextInt(maxCountOnCell + 1);
     }
 

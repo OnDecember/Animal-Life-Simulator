@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.application.config.database.Record;
 import org.application.enums.Direction;
 import org.application.enums.ObjectType;
+import org.application.global.GlobalVariables;
 import org.application.interfaces.Movable;
 import org.application.interfaces.Reproducible;
 import org.application.objects.Organism;
@@ -18,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @ToString
 public abstract class Animal extends Organism implements Movable, Reproducible {
 
-    ThreadLocalRandom random = ThreadLocalRandom.current();
+    ThreadLocalRandom random = GlobalVariables.random;
 
     private int speed;
     private double maxSatiatingFood;

@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class ReproduceAnimalController extends Controller {
 
-    ThreadLocalRandom random = ThreadLocalRandom.current();
+    ThreadLocalRandom random = GlobalVariables.random;
 
     public ReproduceAnimalController(Island island) {
         super(island);
