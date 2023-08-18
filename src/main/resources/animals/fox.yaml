@@ -3,7 +3,7 @@ weight: 8
 maxCountOnCell: 30
 speed: 2
 maxSatiatingFood: 2
-chanceToReproduce: 25
+chanceToReproduce: 15
 maxChild: 3
 targetMatrix:
   Rabbit: 70

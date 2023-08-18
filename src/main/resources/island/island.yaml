@@ -1,2 +1,3 @@
-width: 100
-height: 20
+width: 10
+height: 10
+msToReloadConsole: 5000

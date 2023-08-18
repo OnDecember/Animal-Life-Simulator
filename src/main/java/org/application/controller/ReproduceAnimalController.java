@@ -8,6 +8,7 @@ import org.application.objects.Organism;
 import org.application.objects.animals.Animal;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -59,9 +60,9 @@ public class ReproduceAnimalController extends Controller {
         int countChild = random.nextInt(((Animal) organism).getMaxChild()) + 1;
         countChild = Math.min(countChild, (maxCountOnCell - countOnLocation));
 
-        Set<Organism> child = Stream.generate(organism::multiply)
+        Set<Organism> child = Collections.synchronizedSet(Stream.generate(organism::multiply)
                 .limit(countChild)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet()));
 
         location.getOrganisms().merge(organism.getClass(), child, (set1, set2) -> {
             set1.addAll(set2);

@@ -1,7 +1,16 @@
 package org.application.controller;
 
+import org.application.console.Console;
+import org.application.global.GlobalVariables;
 import org.application.island.Island;
 import org.application.island.Location;
+import org.application.objects.Organism;
+import org.application.objects.animals.Animal;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class EatController extends Controller {
 
@@ -11,6 +20,29 @@ public class EatController extends Controller {
 
     @Override
     protected void doAction(Location location) {
+        GlobalVariables.lock.lock();
+        location.getSetOrganismsOnLocation()
+                .stream()
+                .filter(organism -> organism instanceof Animal animal)
+                .map(Animal.class::cast)
+                .filter(Animal::canEat)
+                .forEach(animal -> eat(animal, location));
+        GlobalVariables.lock.unlock();
+    }
 
+    private void eat(Animal animal, Location location) {
+        List<Organism> targets = location.getSetOrganismsOnLocation()
+                .stream()
+                .filter(organism -> animal.getTargetMatrix().containsKey(organism.getObjectType()))
+                .collect(Collectors.toList());
+        if (targets.isEmpty()) return;
+        Collections.shuffle(targets);
+        Organism organism = targets.get(GlobalVariables.random.nextInt(targets.size()));
+        if (animal.eat(organism)) {
+            location.removeOrganism(organism);
+            Console.logKilledOrganism(organism.getClass());
+            Console.logDeadOrganism(organism.getClass());
+            Console.logEatOrganism(animal.getClass());
+        }
     }
 }

@@ -1,9 +1,9 @@
 objectType: Wolf
 weight: 50
-maxCountOnCell: 30
+maxCountOnCell: 10
 speed: 3
 maxSatiatingFood: 8
-chanceToReproduce: 25
+chanceToReproduce: 10
 maxChild: 2
 targetMatrix:
   Horse: 50

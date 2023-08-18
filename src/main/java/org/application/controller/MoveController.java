@@ -8,10 +8,7 @@ import org.application.island.Location;
 import org.application.objects.Organism;
 import org.application.objects.animals.Animal;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MoveController extends Controller {
 
@@ -60,7 +57,7 @@ public class MoveController extends Controller {
 
         Map<Class<? extends Organism>, Set<Organism>> organismOnLocation = newLocation.getOrganisms();
 
-        organismOnLocation.merge(animal.getClass(), new HashSet<>(), (set1, set2) -> {
+        organismOnLocation.merge(animal.getClass(), Collections.synchronizedSet(new HashSet<>()), (set1, set2) -> {
             set1.addAll(set2);
             return set1;
         });

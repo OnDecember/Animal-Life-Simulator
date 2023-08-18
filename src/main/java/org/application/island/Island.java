@@ -11,10 +11,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -27,6 +24,7 @@ public class Island {
 
     private int width;
     private int height;
+    private long msToReloadConsole;
     private volatile Location[][] locations;
 
     {
@@ -63,6 +61,7 @@ public class Island {
             Map<String, Integer> map = yaml.load(inputStream);
             this.width = map.get("width");
             this.height = map.get("height");
+            this.msToReloadConsole = map.get("msToReloadConsole");
         } catch (IOException exception) {
             throw new RuntimeException("file not found", exception);
         }

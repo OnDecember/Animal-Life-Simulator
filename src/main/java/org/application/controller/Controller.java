@@ -1,6 +1,7 @@
 package org.application.controller;
 
 import org.application.config.database.DataBase;
+import org.application.global.GlobalVariables;
 import org.application.island.Island;
 import org.application.island.Location;
 

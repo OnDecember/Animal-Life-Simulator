@@ -5,7 +5,7 @@ import org.application.console.Console;
 import org.application.objects.animals.Herbivorous;
 import org.application.config.database.Record;
 
-//@Config(filePath = "animals/rabbit.yaml")
+@Config(filePath = "animals/horse.yaml")
 public class Horse extends Herbivorous {
 
     private final Record record;

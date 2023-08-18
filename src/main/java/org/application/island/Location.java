@@ -8,6 +8,8 @@ import org.application.global.GlobalVariables;
 import org.application.objects.Organism;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -16,7 +18,7 @@ import java.util.stream.Collectors;
 public class Location {
 
     private final Factory factory = Factory.getInstance();
-    private Map<Class<? extends Organism>, Set<Organism>> organisms = new HashMap<>();
+    private ConcurrentMap<Class<? extends Organism>, Set<Organism>> organisms = new ConcurrentHashMap<>();
     private ThreadLocalRandom random = GlobalVariables.random;
 
     private final int x;
@@ -29,7 +31,7 @@ public class Location {
     }
 
     public void fillLocation(Class<? extends Organism> value, Record record, int maxCountOnCell) {
-        Set<Organism> set = new HashSet<>();
+        Set<Organism> set = Collections.synchronizedSet(new HashSet<>());
         for (int i = 0; i < maxCountOnCell; i++) {
             set.add(factory.create(value, record));
         }
@@ -40,7 +42,7 @@ public class Location {
         return random.nextInt(maxCountOnCell + 1);
     }
 
-    public Set<Organism> getSetOrganismsOnLocation() {
+    public synchronized Set<Organism> getSetOrganismsOnLocation() {
         return organisms.values()
                 .stream()
                 .flatMap(Collection::stream)

@@ -18,8 +18,7 @@ public class Survival {
 
         ScheduledExecutorService service = Executors.newScheduledThreadPool(3);
         service.scheduleAtFixedRate(plantGrowth, 0, 1, TimeUnit.SECONDS);
-        service.scheduleAtFixedRate(simulation, 0, 1, TimeUnit.SECONDS);
-        service.scheduleAtFixedRate(console, 0, 1, TimeUnit.SECONDS);
-
+        service.scheduleAtFixedRate(simulation, 1, 1, TimeUnit.SECONDS);
+        service.scheduleAtFixedRate(console, 0, island.getMsToReloadConsole(), TimeUnit.MILLISECONDS);
     }
 }
