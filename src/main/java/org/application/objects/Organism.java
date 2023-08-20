@@ -2,14 +2,13 @@ package org.application.objects;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.application.config.database.Record;
 import org.application.enums.ObjectType;
 import org.application.interfaces.Reproducible;
+import org.application.island.Location;
 
 @Getter
 @Setter
-@ToString
 public abstract class Organism implements Reproducible {
 
     private double weight;
@@ -19,11 +18,21 @@ public abstract class Organism implements Reproducible {
 
     private boolean canReproduce = true;
 
-    public Organism(Record record) {
+    private Location location;
+    private Location.Statistic statistic;
+
+    public Organism(Record record, Location location) {
         weight = record.getWeight();
         maxCountOnCell = record.getMaxCountOnCell();
         objectType = record.getObjectType();
         chanceToReproduce = record.getChanceToReproduce();
+
+        this.location = location;
+
+        statistic = Location.getOrganismStatistic(this.getClass());
+        statistic.logAllOrganisms();
+        statistic.logBornOrganisms();
+        statistic.logAliveOrganisms();
     }
 
     public abstract Organism multiply();

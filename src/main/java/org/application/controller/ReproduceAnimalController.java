@@ -78,5 +78,4 @@ public class ReproduceAnimalController extends Controller {
                 .filter(rec -> rec instanceof Animal animal && animal.isCanReproduce() && rec != organism)
                 .collect(Collectors.toSet());
     }
-
 }

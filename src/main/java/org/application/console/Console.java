@@ -1,19 +1,19 @@
 package org.application.console;
 
-import lombok.Data;
-import lombok.Getter;
-import org.application.global.GlobalVariables;
+import lombok.SneakyThrows;
 import org.application.island.Island;
+import org.application.island.Location;
 import org.application.objects.Organism;
 import org.application.objects.animals.Animal;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.function.Function;
 
 public class Console implements Runnable {
 
-    private static final Map<Class<? extends Organism>, Statistic> statistic = new HashMap<>();
+    private Map<Class<? extends Organism>, Location.Statistic> statistic;
     private final Island island;
     private final long start = System.currentTimeMillis();
 
@@ -27,19 +27,27 @@ public class Console implements Runnable {
     }
 
     public void displayInfo() {
-        GlobalVariables.lock.lock();
-        addAliveOrganismToStatistic();
+        statistic = cloneMap(Location.getStatistic());
+        AllStatistic allStatistic = new AllStatistic(statistic);
+
         System.out.println("_".repeat(98));
-        System.out.printf("|%-12s| %-10s| %-10s| %-10s| %-10s| %-10s| %-10s| %-10s|%n", "Organism", "All", "Alive", "Born", "Killed", "Starving", "Dead", "Eat");
+        System.out.printf("|%-12s| %-10s| %-10s| %-10s| %-10s| %-10s| %-10s| %-10s|%n", "Organism", "All", "Alive", "Born", "Ate", "Starving", "Killed", "Dead");
         System.out.printf("|%-12s|%-10s|%-10s|%-10s|%-10s|%-10s|%-10s|%-10s|%n", "_".repeat(12), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11));
-        statistic.forEach((key, value) -> System.out.printf("|%-12s| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d|%n", key.getSimpleName(), value.alive + value.dead, value.alive, value.born, value.killed, value.starving, value.dead, value.eat));
+        statistic.forEach((key, value) -> System.out.printf("|%-12s| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d|%n", key.getSimpleName(), value.getAll().get(), value.getAlive().get(), value.getBorn().get(), value.getAte().get(), value.getStarving().get(), value.getKilled().get(), value.getDead().get()));
         System.out.println("¯".repeat(98));
-        Statistic allStatistic = allAnimalStatistic();
-        System.out.printf("|%-12s| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d|%n", "All animals", allStatistic.alive + allStatistic.dead, allStatistic.alive, allStatistic.born, allStatistic.killed, allStatistic.starving, allStatistic.dead, allStatistic.eat);
+        System.out.printf("|%-12s| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d|%n", "All animals", allStatistic.all, allStatistic.alive, allStatistic.born, allStatistic.ate, allStatistic.starving, allStatistic.killed, allStatistic.dead);
         System.out.println("¯".repeat(98));
+
         time();
         System.out.println("\n".repeat(1));
-        GlobalVariables.lock.unlock();
+    }
+
+    private Map<Class<? extends Organism>, Location.Statistic> cloneMap(Map<Class<? extends Organism>, Location.Statistic> original) {
+        Map<Class<? extends Organism>, Location.Statistic> copy = new HashMap<>();
+        synchronized (Collections.unmodifiableMap(original)) {
+            original.forEach((k, v) -> copy.put(k, v.clone()));
+        }
+        return copy;
     }
 
     private void time() {
@@ -51,95 +59,35 @@ public class Console implements Runnable {
         if (second >= 60) System.out.printf("Life time: %d min. %d sec.%n", min, second - min * 60);
     }
 
-    private void addAliveOrganismToStatistic() {
-        Map<Class<? extends Organism>, Set<Organism>> organismOnIsland = island.getGroupingOrganismMap();
-        organismOnIsland.forEach((key, value) -> logAliveOrganism(key, value.size()));
-    }
+    private static class AllStatistic {
 
-    private static Statistic getStatistic(Class<? extends Organism> clazz) {
-        if (!statistic.containsKey(clazz)) {
-            statistic.put(clazz, new Statistic());
-        }
-        return statistic.get(clazz);
-    }
+        private final int all;
+        private final int alive;
+        private final int born;
+        private final int ate;
+        private final int starving;
+        private final int killed;
+        private final int dead;
 
-    private Statistic allAnimalStatistic() {
-        Statistic allStatistic = new Statistic();
-
-        allStatistic.alive = statistic.entrySet()
-                .stream()
-                .filter(entry -> entry.getKey().getSuperclass().getSuperclass().equals(Animal.class))
-                .map(Map.Entry::getValue)
-                .reduce(0, (total, el) -> total + el.alive, Integer::sum);
-
-        allStatistic.dead = statistic.entrySet()
-                .stream()
-                .filter(entry -> entry.getKey().getSuperclass().getSuperclass().equals(Animal.class))
-                .map(Map.Entry::getValue)
-                .reduce(0, (total, el) -> total + el.dead, Integer::sum);
-
-        allStatistic.starving = statistic.entrySet()
-                .stream()
-                .filter(entry -> entry.getKey().getSuperclass().getSuperclass().equals(Animal.class))
-                .map(Map.Entry::getValue)
-                .reduce(0, (total, el) -> total + el.starving, Integer::sum);
-
-        allStatistic.killed = statistic.entrySet()
-                .stream()
-                .filter(entry -> entry.getKey().getSuperclass().getSuperclass().equals(Animal.class))
-                .map(Map.Entry::getValue)
-                .reduce(0, (total, el) -> total + el.killed, Integer::sum);
-
-        allStatistic.born = statistic.entrySet()
-                .stream()
-                .filter(entry -> entry.getKey().getSuperclass().getSuperclass().equals(Animal.class))
-                .map(Map.Entry::getValue)
-                .reduce(0, (total, el) -> total + el.born, Integer::sum);
-
-        allStatistic.eat = statistic.entrySet()
-                .stream()
-                .filter(entry -> entry.getKey().getSuperclass().getSuperclass().equals(Animal.class))
-                .map(Map.Entry::getValue)
-                .reduce(0, (total, el) -> total + el.eat, Integer::sum);
-
-        return allStatistic;
-    }
-
-    private static void logAliveOrganism(Class<? extends Organism> clazz, Integer numberOfOrganisms) {
-        getStatistic(clazz).alive = numberOfOrganisms;
-    }
-
-    public static void logBornOrganism(Class<? extends Organism> clazz) {
-        getStatistic(clazz).born++;
-    }
-
-    public static void logKilledOrganism(Class<? extends Organism> clazz) {
-        getStatistic(clazz).killed++;
-    }
-
-    public static void logStarvingOrganism(Class<? extends Organism> clazz) {
-        getStatistic(clazz).starving++;
-    }
-
-    public static void logDeadOrganism(Class<? extends Organism> clazz) {
-        getStatistic(clazz).dead++;
-    }
-    public static void logEatOrganism(Class<? extends Organism> clazz) {
-        getStatistic(clazz).eat++;
-    }
-
-
-    private static class Statistic {
-
-        private int alive;
-        private int born;
-        private int killed;
-        private int starving;
-        private int dead;
-        private int eat;
-
-        private Statistic() {
+        private AllStatistic(Map<Class<? extends Organism>, Location.Statistic> statistic) {
+            all = load(statistic, organismStatistic -> organismStatistic.getAll().get());
+            alive = load(statistic, organismStatistic -> organismStatistic.getAlive().get());
+            born = load(statistic, organismStatistic -> organismStatistic.getBorn().get());
+            ate = load(statistic, organismStatistic -> organismStatistic.getAte().get());
+            starving = load(statistic, organismStatistic -> organismStatistic.getStarving().get());
+            killed = load(statistic, organismStatistic -> organismStatistic.getKilled().get());
+            dead = load(statistic, organismStatistic -> organismStatistic.getDead().get());
         }
 
+
+        // TODO: implement Callable
+        @SneakyThrows
+        private Integer load(Map<Class<? extends Organism>, Location.Statistic> statistic, Function<Location.Statistic, Integer> function) {
+            return statistic.entrySet()
+                    .stream()
+                    .filter(entry -> entry.getKey().getSuperclass().getSuperclass() == Animal.class)
+                    .map(Map.Entry::getValue)
+                    .reduce(0, (total, val) -> total + function.apply(val), Integer::sum);
+        }
     }
 }

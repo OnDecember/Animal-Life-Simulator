@@ -1,16 +1,14 @@
 package org.application;
 
 import org.application.console.Console;
-import org.application.enums.ObjectType;
 import org.application.island.Island;
-import org.application.objects.Organism;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Survival {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         Island island = new Island();
         Console console = new Console(island);
         Simulation simulation = new Simulation(island);

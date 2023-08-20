@@ -1,7 +1,6 @@
 package org.application;
 
 import org.application.controller.*;
-import org.application.global.GlobalVariables;
 import org.application.island.Island;
 
 public class Simulation implements Runnable {

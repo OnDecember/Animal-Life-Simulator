@@ -19,23 +19,23 @@ public class MoveController extends Controller {
 
     @Override
     public void start() {
+        GlobalVariables.lock.lock();
         Arrays.stream(locations)
                 .flatMap(Arrays::stream)
                 .peek(this::doAction)
                 .flatMap(location -> location.getSetOrganismsOnLocation().stream())
                 .filter(organism -> organism instanceof Animal animal && !animal.isCanMove())
                 .forEach(organism -> ((Animal) organism).setCanMove(true));
+        GlobalVariables.lock.unlock();
     }
 
     @Override
     protected void doAction(Location location) {
-        GlobalVariables.lock.lock();
         location.getSetOrganismsOnLocation()
                 .stream()
                 .filter(organism -> organism instanceof Animal animal && animal.isCanMove())
                 .map(organism -> (Movable) organism)
                 .forEach(movable -> moveAnimal(movable, location));
-        GlobalVariables.lock.unlock();
     }
 
     private void moveAnimal(Movable movable, Location currentLocation) {
@@ -66,6 +66,7 @@ public class MoveController extends Controller {
 
         currentLocation.removeOrganism(animal);
         newLocationOrganismSet.add(animal);
+        animal.setLocation(newLocation);
         animal.setCanMove(false);
     }
 

@@ -1,6 +1,5 @@
 package org.application.controller;
 
-import org.application.console.Console;
 import org.application.global.GlobalVariables;
 import org.application.island.Island;
 import org.application.island.Location;
@@ -9,7 +8,6 @@ import org.application.objects.animals.Animal;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class EatController extends Controller {
@@ -38,11 +36,6 @@ public class EatController extends Controller {
         if (targets.isEmpty()) return;
         Collections.shuffle(targets);
         Organism organism = targets.get(GlobalVariables.random.nextInt(targets.size()));
-        if (animal.eat(organism)) {
-            location.removeOrganism(organism);
-            Console.logKilledOrganism(organism.getClass());
-            Console.logDeadOrganism(organism.getClass());
-            Console.logEatOrganism(animal.getClass());
-        }
+        animal.eat(organism);
     }
 }

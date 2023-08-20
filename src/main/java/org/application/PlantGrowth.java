@@ -38,7 +38,7 @@ public class PlantGrowth implements Runnable {
 
     private void growthPlant(Class<? extends Plant> clazz, Location location) {
         Plant plant = (Plant) location.getOrganisms().get(clazz).stream().findFirst().get();
-        int randomCount = random.nextInt(plant.getMaxCountOnCell() + 1)  ;
+        int randomCount = random.nextInt(plant.getMaxCountOnCell() + 1);
         int newPlants = randomCount * plant.getChanceToReproduce() / 100;
 
         Set<Organism> plants = Stream.generate(plant::multiply)

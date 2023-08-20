@@ -1,18 +1,17 @@
 package org.application.config.factory;
 
-import lombok.Getter;
-import org.application.config.database.DataBase;
 import org.application.config.database.Record;
+import org.application.island.Location;
 import org.application.objects.Organism;
 
 import java.lang.reflect.InvocationTargetException;
 
 public class Factory {
 
-    private final DataBase dataBase = DataBase.getInstance();
     private static Factory instance;
 
-    private Factory(){}
+    private Factory() {
+    }
 
     public static Factory getInstance() {
         if (instance == null) {
@@ -21,9 +20,9 @@ public class Factory {
         return instance;
     }
 
-    public Organism create(Class<? extends Organism> clazz, Record record) {
+    public Organism create(Class<? extends Organism> clazz, Record record, Location location) {
         try {
-            return clazz.getConstructor(Record.class).newInstance(record);
+            return clazz.getConstructor(Record.class, Location.class).newInstance(record, location);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
                  InvocationTargetException exception) {
             throw new RuntimeException(exception);

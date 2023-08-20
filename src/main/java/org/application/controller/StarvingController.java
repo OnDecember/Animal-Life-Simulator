@@ -1,6 +1,5 @@
 package org.application.controller;
 
-import org.application.console.Console;
 import org.application.global.GlobalVariables;
 import org.application.island.Island;
 import org.application.island.Location;
@@ -31,8 +30,8 @@ public class StarvingController extends Controller {
         double saturation = animal.getSaturation();
         if (saturation <= starvingPerStep) {
             location.removeOrganism(animal);
-            Console.logStarvingOrganism(animal.getClass());
-            Console.logDeadOrganism(animal.getClass());
+            Location.getOrganismStatistic(animal.getClass()).logStarvingOrganisms();
+            Location.getOrganismStatistic(animal.getClass()).logDeadOrganisms();
         } else animal.setSaturation(saturation - starvingPerStep);
     }
 }

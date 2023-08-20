@@ -6,12 +6,12 @@ maxSatiatingFood: 8
 chanceToReproduce: 10
 maxChild: 2
 targetMatrix:
-  Horse: 50
-  Deer: 15
+#  Horse: 50
+#  Deer: 15
   Rabbit: 60
-  Mouse: 80
-  Goat: 60
+#  Mouse: 80
+#  Goat: 60
   Sheep: 70
-  Boar: 15
-  Buffalo: 10
-  Duck: 40
+#  Boar: 15
+#  Buffalo: 10
+#  Duck: 40
