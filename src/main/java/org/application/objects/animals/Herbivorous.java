@@ -24,7 +24,7 @@ public abstract class Herbivorous extends Animal {
 
     protected void eatPlant(Organism organism) {
         double organismWeight = organism.getWeight();
-        int countEatOrganisms = (int) Math.ceil(getMaxSatiatingFood() * 0.5 / organismWeight);
+        int countEatOrganisms = (int) Math.max(Math.ceil(getMaxSatiatingFood() * 0.5 / organismWeight), 1);
         Set<Organism> copy = new HashSet<>(getLocation().getSetOrganismsOnLocation());
         copy.stream()
                 .filter(org -> org.getClass() == organism.getClass())
