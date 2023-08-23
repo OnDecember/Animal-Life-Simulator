@@ -1,5 +1,6 @@
 package org.application.controller;
 
+import org.application.global.GlobalVariables;
 import org.application.island.Island;
 import org.application.island.Location;
 
@@ -18,8 +19,10 @@ public abstract class Controller {
     protected abstract void doAction(Location location);
 
     public void start() {
+        GlobalVariables.lock.lock();
         Arrays.stream(locations)
                 .flatMap(Arrays::stream)
                 .forEach(this::doAction);
+        GlobalVariables.lock.unlock();
     }
 }

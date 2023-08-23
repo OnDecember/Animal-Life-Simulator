@@ -7,6 +7,6 @@ chanceToReproduce: 15
 maxChild: 3
 targetMatrix:
   Rabbit: 70
-#  Mouse: 90
-#  Duck: 60
-#  Caterpillar: 40
+  Mouse: 90
+  Duck: 60
+  Caterpillar: 40

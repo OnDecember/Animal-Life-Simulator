@@ -15,14 +15,12 @@ public class StarvingController extends Controller {
 
     @Override
     protected void doAction(Location location) {
-        GlobalVariables.lock.lock();
         location.getSetOrganismsOnLocation()
                 .stream()
                 .filter(organism -> organism instanceof Animal animal)
                 .map(Animal.class::cast)
                 .filter(animal -> animal.getMaxSatiatingFood() > 0)
                 .forEach(animal -> starving(animal, location));
-        GlobalVariables.lock.unlock();
     }
 
     private void starving(Animal animal, Location location) {

@@ -1,6 +1,6 @@
 objectType: Boar
 weight: 400
-maxCountOnCell: 15
+maxCountOnCell: 50
 speed: 2
 maxSatiatingFood: 50
 chanceToReproduce: 10

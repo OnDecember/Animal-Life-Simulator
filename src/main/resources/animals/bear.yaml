@@ -1,6 +1,6 @@
 objectType: Bear
 weight: 500
-maxCountOnCell: 3
+maxCountOnCell: 5
 speed: 2
 maxSatiatingFood: 80
 chanceToReproduce: 30

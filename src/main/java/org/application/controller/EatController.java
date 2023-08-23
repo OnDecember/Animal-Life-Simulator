@@ -18,14 +18,12 @@ public class EatController extends Controller {
 
     @Override
     protected void doAction(Location location) {
-        GlobalVariables.lock.lock();
         location.getSetOrganismsOnLocation()
                 .stream()
                 .filter(organism -> organism instanceof Animal animal)
                 .map(Animal.class::cast)
                 .filter(Animal::canEat)
                 .forEach(animal -> eat(animal, location));
-        GlobalVariables.lock.unlock();
     }
 
     private void eat(Animal animal, Location location) {

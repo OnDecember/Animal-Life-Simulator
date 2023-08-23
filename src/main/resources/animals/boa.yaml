@@ -1,6 +1,6 @@
 objectType: Boa
 weight: 15
-maxCountOnCell: 10
+maxCountOnCell: 30
 speed: 1
 maxSatiatingFood: 3
 chanceToReproduce: 15

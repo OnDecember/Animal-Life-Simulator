@@ -1,6 +1,6 @@
 objectType: Duck
 weight: 1
-maxCountOnCell: 30
+maxCountOnCell: 200
 speed: 4
 maxSatiatingFood: 0.15
 chanceToReproduce: 15

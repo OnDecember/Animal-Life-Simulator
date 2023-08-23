@@ -1,6 +1,6 @@
 objectType: Mouse
 weight: 0.05
-maxCountOnCell: 100
+maxCountOnCell: 500
 speed: 1
 maxSatiatingFood: 0.01
 chanceToReproduce: 12

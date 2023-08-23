@@ -1,6 +1,6 @@
 objectType: Caterpillar
 weight: 0.01
-maxCountOnCell: 200
+maxCountOnCell: 1000
 speed: 0
 maxSatiatingFood: 0
 chanceToReproduce: 20

@@ -25,7 +25,6 @@ public class PlantGrowth implements Runnable {
     }
 
     protected void doAction(Location location) {
-        GlobalVariables.lock.lock();
         location.getSetOrganismsOnLocation()
                 .stream()
                 .filter(organism -> organism instanceof Plant)
@@ -33,7 +32,6 @@ public class PlantGrowth implements Runnable {
                 .map(Plant::getClass)
                 .distinct()
                 .forEach(clazz -> growthPlant(clazz, location));
-        GlobalVariables.lock.unlock();
     }
 
     private void growthPlant(Class<? extends Plant> clazz, Location location) {
@@ -53,8 +51,10 @@ public class PlantGrowth implements Runnable {
 
     @Override
     public void run() {
+        GlobalVariables.lock.lock();
         Arrays.stream(locations)
                 .flatMap(Arrays::stream)
                 .forEach(this::doAction);
+        GlobalVariables.lock.unlock();
     }
 }
