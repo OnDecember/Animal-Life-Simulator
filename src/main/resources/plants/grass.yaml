@@ -1,4 +1,4 @@
-weight: 5
-maxCountOnCell: 500
+weight: 1
+maxCountOnCell: 200
 chanceToReproduce: 1000
 objectType: Grass

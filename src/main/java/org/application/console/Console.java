@@ -34,9 +34,9 @@ public class Console implements Runnable {
         System.out.printf("|%-12s| %-10s| %-10s| %-10s| %-10s| %-10s| %-10s| %-10s|%n", "Organism", "All", "Alive", "Born", "Ate", "Starving", "Killed", "Dead");
         System.out.printf("|%-12s|%-10s|%-10s|%-10s|%-10s|%-10s|%-10s|%-10s|%n", "_".repeat(12), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11), "_".repeat(11));
         statistic.forEach((key, value) -> System.out.printf("|%-12s| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d|%n", key.getSimpleName(), value.getAll().get(), value.getAlive().get(), value.getBorn().get(), value.getAte().get(), value.getStarving().get(), value.getKilled().get(), value.getDead().get()));
-        System.out.println("¯".repeat(98));
+        System.out.println("|" + "_".repeat(96) + "|");
         System.out.printf("|%-12s| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d| %-10d|%n", "All animals", allStatistic.all, allStatistic.alive, allStatistic.born, allStatistic.ate, allStatistic.starving, allStatistic.killed, allStatistic.dead);
-        System.out.println("¯".repeat(98));
+        System.out.println("|" + "_".repeat(96) + "|");
 
         time();
         System.out.println("\n".repeat(1));
